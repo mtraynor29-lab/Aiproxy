@@ -8,7 +8,7 @@ compatibility_date = "2025-09-01"
 #   npx wrangler secret put PROXY_API_KEY
 
 [vars]
-CORS_ORIGIN = "https://aiproxy-topaz.vercel.app/"
+CORS_ORIGIN = "https://aiproxy-topaz.vercel.app"
 
 # Restrict CORS later, for example:
 # CORS_ORIGIN = "https://app.example.com"

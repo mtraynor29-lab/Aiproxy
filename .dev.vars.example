@@ -1,3 +1,3 @@
 HCNSEC_API_KEY=replace-with-your-upstream-api-key
-# PROXY_API_KEY=replace-with-your-optional-client-api-key
-CORS_ORIGIN=*
+PROXY_API_KEY=replace-with-your-client-api-key
+CORS_ORIGIN=https://aiproxy-topaz.vercel.app

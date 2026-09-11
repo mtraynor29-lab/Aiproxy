@@ -130,7 +130,12 @@ async function proxyChatCompletions(request: Request, env: Env): Promise<Respons
 function authorizeClient(request: Request, env: Env): Response | null {
   const expected = env.PROXY_API_KEY;
   if (!expected) {
-    return null;
+    return errorResponse(
+      env,
+      503,
+      "Proxy authentication is not configured",
+      "configuration_error",
+    );
   }
 
   const token = bearerToken(request);
@@ -182,15 +187,17 @@ function normalizePath(pathname: string): string {
 }
 
 function corsHeaders(env: Env): Headers {
-  const origin = env.CORS_ORIGIN || "*";
+  const configuredOrigin = env.CORS_ORIGIN?.trim().replace(/\/$/, "");
+  const origin = configuredOrigin || "null";
   const headers = new Headers();
   headers.set("Access-Control-Allow-Origin", origin);
-  headers.set("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+  headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
   headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   headers.set("Access-Control-Max-Age", "86400");
-  if (origin !== "*") {
-    headers.set("Vary", "Origin");
-  }
+  headers.set("Vary", "Origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("Strict-Transport-Security", "max-age=63072000");
   return headers;
 }
 
