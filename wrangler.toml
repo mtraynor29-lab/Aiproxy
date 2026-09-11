@@ -1,0 +1,30 @@
+name = "hcnsec-ai-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+
+# Never put HCNSEC_API_KEY or PROXY_API_KEY here.
+# Configure secrets with:
+#   npx wrangler secret put HCNSEC_API_KEY
+#   npx wrangler secret put PROXY_API_KEY
+
+[vars]
+CORS_ORIGIN = "*"
+
+# Restrict CORS later, for example:
+# CORS_ORIGIN = "https://app.example.com"
+
+# Custom domain (uncomment and edit after the zone is in Cloudflare):
+# [[routes]]
+# pattern = "api.example.com"
+# custom_domain = true
+
+# Optional Workers Rate Limiting binding.
+# Enable in the Cloudflare dashboard or uncomment after creating a namespace.
+# Tradeoffs are documented in README.md.
+# [[ratelimits]]
+# name = "RATE_LIMITER"
+# namespace_id = "1001"
+# simple = { limit = 60, period = 60 }
+
+[dev]
+port = 8787
