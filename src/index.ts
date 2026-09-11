@@ -129,13 +129,9 @@ async function proxyChatCompletions(request: Request, env: Env): Promise<Respons
 
 function authorizeClient(request: Request, env: Env): Response | null {
   const expected = env.PROXY_API_KEY;
+  // Authentication is optional: when PROXY_API_KEY is unset, the proxy is open.
   if (!expected) {
-    return errorResponse(
-      env,
-      503,
-      "Proxy authentication is not configured",
-      "configuration_error",
-    );
+    return null;
   }
 
   const token = bearerToken(request);
