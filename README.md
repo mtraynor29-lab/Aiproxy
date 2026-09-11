@@ -9,7 +9,7 @@ The Worker injects the upstream API key from a Cloudflare Secret. Clients never 
 ```text
 Client / AI application
         |
-        |  Bearer PROXY_API_KEY  (optional)
+        |  Bearer PROXY_API_KEY  (required)
         v
 Cloudflare Worker
         |
@@ -71,18 +71,18 @@ Never hardcode keys in source, GitHub, frontend code, logs, or API responses.
 ### Upstream key (required)
 
 ```bash
-npx wrangler secret put HCNSEC_API_KEY
+pnpm wrangler secret put HCNSEC_API_KEY
 ```
 
 Wrangler prompts for the value. It is stored as a Cloudflare Worker Secret and read as `env.HCNSEC_API_KEY`.
 
-### Optional client key
+### Client key (required)
 
 ```bash
-npx wrangler secret put PROXY_API_KEY
+pnpm wrangler secret put PROXY_API_KEY
 ```
 
-If `PROXY_API_KEY` is set, clients must send:
+Clients must send:
 
 ```text
 Authorization: Bearer <MY_PROXY_KEY>
@@ -90,7 +90,7 @@ Authorization: Bearer <MY_PROXY_KEY>
 
 The Worker then authenticates to HCNSEC with `HCNSEC_API_KEY`.
 
-If `PROXY_API_KEY` is not set, the public endpoint allows unauthenticated requests (development only). Enable `PROXY_API_KEY` before sharing a public URL.
+If `PROXY_API_KEY` is missing, the proxy returns HTTP 503 rather than exposing an unauthenticated endpoint.
 
 ### Local development secrets
 
@@ -195,7 +195,7 @@ curl https://YOUR_WORKER_URL/
 
 ### Normal completion
 
-Without `PROXY_API_KEY`:
+With `PROXY_API_KEY`:
 
 ```bash
 curl https://YOUR_WORKER_URL/v1/chat/completions \
